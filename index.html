@@ -4,38 +4,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure File Vault Decryption</title>
+    <title>Secure Verification Gateway</title>
 
     <!-- JQuery and Google Fonts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-light: #f8fafc;
-            /* Clean off-white slate background */
-            --card-bg: #ffffff;
-            /* Pure white card */
-            --border-color: #e2e8f0;
-            /* Soft slate border */
-            --text-main: #0f172a;
-            /* Slate 900 */
-            --text-muted: #64748b;
-            /* Slate 500 */
-            --primary: #2563eb;
-            /* Cobalt Blue */
-            --primary-hover: #1d4ed8;
-            --accent: #10b981;
-            /* Emerald Green */
-            --accent-glow: rgba(16, 185, 129, 0.15);
-            --warning: #d97706;
-            /* Amber */
-            --danger: #ef4444;
-            /* Red */
+            /* Web Canvas (Deep Obsidian Space) */
+            --bg-canvas: #06080f;
+            --bg-grid: rgba(255, 255, 255, 0.015);
+            
+            /* Ambient Accents */
+            --glow-indigo: rgba(79, 70, 229, 0.12);
+            --glow-violet: rgba(139, 92, 246, 0.12);
+            --glow-emerald: rgba(16, 185, 129, 0.08);
+
+            /* Dashboard Light-Mode Widgets */
+            --widget-bg: #ffffff;
+            --widget-border: rgba(99, 102, 241, 0.08);
+            --text-main: #0f172a; /* Slate 900 */
+            --text-muted: #475569; /* Slate 600 */
+            
+            /* Core UI Accents */
+            --indigo: #4f46e5;
+            --indigo-hover: #4338ca;
+            --indigo-glow: rgba(79, 70, 229, 0.15);
+            
+            --emerald: #059669;
+            --emerald-bg: rgba(5, 150, 105, 0.06);
+            --amber: #d97706;
+            --amber-bg: rgba(217, 119, 6, 0.06);
+            
+            --task-bg: #f8fafc;
+            --task-border: #e2e8f0;
         }
 
         * {
@@ -45,637 +50,711 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-canvas);
+            background-image: 
+                linear-gradient(var(--bg-grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+            background-size: 30px 30px;
+            background-position: center;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-        }
-
-        /* Top header logo area */
-        .header-logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 24px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        .logo-icon {
-            color: var(--primary);
-        }
-
-        /* Simplified Central Card */
-        .portal-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            width: 100%;
-            max-width: 440px;
-            padding: 32px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        /* File Info Label block */
-        .file-label-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: #f1f5f9;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 12px 16px;
-            margin-bottom: 24px;
-        }
-
-        .file-icon {
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-        }
-
-        .file-details {
-            min-width: 0;
-        }
-
-        .file-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-main);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .file-meta {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        /* Button design */
-        .btn-action {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            background-color: var(--primary);
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            padding: 16px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .btn-action:hover {
-            background-color: var(--primary-hover);
-        }
-
-        /* Progress ring center block */
-        .progress-block {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 10px 0;
-        }
-
-        .progress-ring-wrapper {
+            padding: 24px;
+            overflow-x: hidden;
             position: relative;
-            width: 100px;
-            height: 100px;
-            margin-bottom: 16px;
+            color: #ffffff;
         }
 
-        .progress-ring-circle {
-            transition: stroke-dashoffset 0.1s;
-            transform: rotate(-90deg);
-            transform-origin: 50% 50%;
-        }
-
-        .progress-text {
+        /* Abstract radial glow rings in the background */
+        .glow-sphere-1 {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: var(--text-main);
-            font-family: 'JetBrains Mono', monospace;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--glow-indigo) 0%, rgba(0, 0, 0, 0) 70%);
+            top: -200px;
+            left: -100px;
+            z-index: 0;
+            pointer-events: none;
+            filter: blur(80px);
         }
 
-        .progress-status-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-weight: 500;
-            text-align: center;
+        .glow-sphere-2 {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--glow-violet) 0%, rgba(0, 0, 0, 0) 70%);
+            bottom: -200px;
+            right: -100px;
+            z-index: 0;
+            pointer-events: none;
+            filter: blur(80px);
         }
 
-        /* Terminal diagnostic list inside progress */
-        .progress-log-terminal {
+        /* Main Dashboard Canvas - Light mode wrapper on dark space */
+        .gateway-dashboard {
+            background: var(--widget-bg);
+            border: 1px solid var(--widget-border);
+            border-radius: 28px;
             width: 100%;
-            background: #0f172a;
-            border-radius: 8px;
-            padding: 12px;
-            height: 90px;
-            overflow-y: auto;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: #38bdf8;
-            margin-top: 20px;
-            text-align: left;
-            scrollbar-width: thin;
+            max-width: 580px;
+            padding: 40px;
+            box-shadow: 
+                0 30px 70px -10px rgba(0, 0, 0, 0.7),
+                0 0 50px rgba(79, 70, 229, 0.05);
+            z-index: 10;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-main);
         }
 
-        .log-line {
+        /* Top Accent Indicator */
+        .dashboard-accent-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #4f46e5, #8b5cf6, #3b82f6);
+        }
+
+        /* Dashboard Top Header Navigation */
+        .gateway-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 18px;
+        }
+
+        .gateway-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-icon {
+            color: var(--indigo);
+            background: rgba(79, 70, 229, 0.08);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+        }
+
+        .gateway-version {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Metric Grid Blocks */
+        .metrics-widget-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .metric-card {
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            border-radius: 16px;
+            padding: 12px 16px;
+            text-align: left;
+        }
+
+        .metric-label {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-bottom: 4px;
         }
 
-        .log-success {
-            color: var(--accent);
-        }
-
-        /* Intermediate Unlock Selection Block */
-        .select-block {
-            display: none;
-            animation: fadeIn 0.4s ease;
-            text-align: center;
-        }
-
-        .select-header {
-            margin-bottom: 24px;
-        }
-
-        .select-title {
-            font-size: 1.1rem;
+        .metric-value {
+            font-size: 0.82rem;
             font-weight: 700;
             color: var(--text-main);
-            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .select-desc {
+        .metric-indicator-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-green {
+            background: var(--emerald);
+            box-shadow: 0 0 6px var(--emerald);
+        }
+
+        .dot-amber {
+            background: var(--amber);
+            box-shadow: 0 0 6px var(--amber);
+        }
+
+        /* Main Section Titles */
+        .section-headline {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.4px;
+        }
+
+        .section-subtitle {
             font-size: 0.8rem;
             color: var(--text-muted);
-            line-height: 1.4;
+            font-weight: 500;
+            margin-top: 4px;
         }
 
-        .select-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .btn-premium {
-            background-color: #0f172a;
-            color: #ffffff;
-        }
-
-        .btn-premium:hover {
-            background-color: #1e293b;
-        }
-
-        /* Error payment block */
-        .error-block {
-            display: none;
-            animation: fadeIn 0.4s ease;
+        /* Loading Spinner Widget */
+        .loading-widget {
+            padding: 40px 0;
             text-align: center;
         }
 
-        .error-badge {
-            width: 48px;
-            height: 48px;
-            background: rgba(239, 68, 68, 0.08);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            color: var(--danger);
+        .custom-spinner {
+            width: 44px;
+            height: 44px;
+            border: 3px solid #f1f5f9;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border-top: 3px solid var(--indigo);
+            border-right: 3px solid var(--neon-blue);
+            animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             margin: 0 auto 16px;
         }
 
-        .error-box {
-            background: #fdf2f2;
-            border: 1px solid rgba(239, 68, 68, 0.15);
-            border-radius: 10px;
-            padding: 16px;
-            font-size: 0.8rem;
-            color: #991b1b;
-            line-height: 1.5;
-            margin-bottom: 24px;
-            text-align: left;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
-        /* Locker / Verification Gateway */
-        .locker-block {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .locker-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .locker-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 6px;
-        }
-
-        .locker-desc {
-            font-size: 0.8rem;
+        .loading-text {
+            font-size: 0.82rem;
             color: var(--text-muted);
-            line-height: 1.4;
+            font-weight: 600;
         }
 
-        .offers-list-box {
+        /* Verification Tasks Grid (2 Column Clean Layout) */
+        .tasks-layout-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        @media (max-width: 500px) {
+            .tasks-layout-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Unique Task Grid Card */
+        .task-grid-card {
+            background: #ffffff;
+            border: 1px solid var(--task-border);
+            border-radius: 20px;
+            padding: 20px;
+            text-decoration: none;
+            color: var(--text-main);
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
+            justify-content: space-between;
+            height: 100%;
+            min-height: 146px;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01);
+            position: relative;
         }
 
-        .offer-item {
+        .task-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .task-card-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #94a3b8;
+            background: #f1f5f9;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            background: #f8fafc;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 14px 16px;
-            text-decoration: none;
-            color: inherit;
-            transition: all 0.2s;
+            justify-content: center;
+            transition: all 0.25s ease;
         }
 
-        .offer-item:hover {
-            border-color: var(--primary);
-            background: rgba(37, 99, 235, 0.02);
+        .task-card-badge {
+            font-size: 0.6rem;
+            font-weight: 700;
+            background: rgba(79, 70, 229, 0.08);
+            color: var(--indigo);
+            padding: 3px 6px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(79, 70, 229, 0.12);
         }
 
-        /* Priority boosted offer item */
-        .offer-item.boosted {
-            border-color: rgba(217, 119, 6, 0.3);
-            background: rgba(217, 119, 6, 0.01);
-        }
-
-        .offer-item.boosted:hover {
-            border-color: var(--warning);
-            background: rgba(217, 119, 6, 0.03);
-        }
-
-        .offer-info {
-            min-width: 0;
+        .task-card-info {
+            text-align: left;
+            margin-bottom: 16px;
             flex-grow: 1;
         }
 
-        .offer-title {
-            font-size: 0.82rem;
-            font-weight: 600;
+        .task-card-title {
+            font-size: 0.88rem;
+            font-weight: 700;
             color: var(--text-main);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            line-height: 1.3;
+            margin-bottom: 4px;
         }
 
-        .offer-desc {
-            font-size: 0.72rem;
+        .task-card-desc {
+            font-size: 0.74rem;
             color: var(--text-muted);
-            margin-top: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .offer-badge {
-            font-size: 0.6rem;
-            font-weight: 700;
-            background: rgba(217, 119, 6, 0.1);
-            color: var(--warning);
-            padding: 2px 6px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            flex-shrink: 0;
-        }
-
-        .offer-action-btn {
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--primary);
-            flex-shrink: 0;
-        }
-
-        .offer-item.boosted .offer-action-btn {
-            color: var(--warning);
-        }
-
-        .locker-footer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            border-top: 1px solid var(--border-color);
-            padding-top: 16px;
-        }
-
-        .pulse-dot {
-            width: 7px;
-            height: 7px;
-            background: var(--primary);
-            border-radius: 50%;
-            animation: pulseAnim 1.5s infinite;
-        }
-
-        @keyframes pulseAnim {
-            0% {
-                transform: scale(0.9);
-                opacity: 1;
-            }
-
-            50% {
-                transform: scale(1.3);
-                opacity: 0.5;
-            }
-
-            100% {
-                transform: scale(0.9);
-                opacity: 1;
-            }
-        }
-
-        .status-msg {
-            font-size: 0.75rem;
-            color: var(--text-muted);
+            line-height: 1.4;
             font-weight: 500;
         }
 
-        /* Revealed Decrypted Key Section */
-        .key-revealed-block {
-            display: none;
-            text-align: center;
-            animation: fadeIn 0.4s ease;
+        /* Action bar on task bottom */
+        .task-card-action {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--indigo);
+            transition: all 0.25s ease;
         }
 
-        .success-circle {
-            width: 48px;
-            height: 48px;
-            background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            color: var(--accent);
+        .task-card-action svg {
+            transition: transform 0.25s ease;
+        }
+
+        /* Hover States */
+        .task-grid-card:hover {
+            border-color: rgba(79, 70, 229, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 
+                0 15px 30px -10px rgba(79, 70, 229, 0.1),
+                0 4px 10px rgba(0, 0, 0, 0.02);
+        }
+
+        .task-grid-card:hover .task-card-num {
+            background: var(--indigo);
+            color: #ffffff;
+        }
+
+        .task-grid-card:hover .task-card-action {
+            color: var(--indigo-hover);
+        }
+
+        .task-grid-card:hover .task-card-action svg {
+            transform: translate(3px, -2px);
+        }
+
+        /* Boosted (Special Offer) Styling */
+        .task-grid-card.boosted {
+            border-color: rgba(217, 119, 6, 0.15);
+            background: rgba(217, 119, 6, 0.01);
+        }
+
+        .task-grid-card.boosted .task-card-badge {
+            background: var(--amber-bg);
+            color: var(--amber);
+            border-color: rgba(217, 119, 6, 0.15);
+        }
+
+        .task-grid-card.boosted:hover {
+            border-color: rgba(217, 119, 6, 0.35);
+            box-shadow: 0 15px 30px -10px rgba(217, 119, 6, 0.1);
+        }
+
+        .task-grid-card.boosted:hover .task-card-num {
+            background: var(--amber);
+            color: #ffffff;
+        }
+
+        .task-grid-card.boosted:hover .task-card-action {
+            color: var(--amber);
+        }
+
+        /* Console Log Ticker (Highly professional element) */
+        .console-log-ticker {
+            background: #0f172a; /* Rich dark background */
+            border-radius: 14px;
+            padding: 12px 16px;
+            text-align: left;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .console-prefix {
+            color: #38bdf8;
+            font-weight: 700;
+        }
+
+        .console-message {
+            color: #cbd5e1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-grow: 1;
+        }
+
+        /* Footer Connection Panel */
+        .dashboard-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 20px;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--indigo);
+            border-radius: 50%;
+            animation: pulseAnim 1.6s infinite;
+        }
+
+        .status-dot.active {
+            background: var(--emerald);
+            box-shadow: 0 0 6px var(--emerald);
+        }
+
+        @keyframes pulseAnim {
+            0% { transform: scale(0.85); opacity: 1; }
+            50% { transform: scale(1.35); opacity: 0.4; }
+            100% { transform: scale(0.85); opacity: 1; }
+        }
+
+        .dev-sim-btn {
+            background: rgba(239, 68, 68, 0.06);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dev-sim-btn:hover {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        /* 3. Key Revealed Widget Block */
+        .success-widget {
+            text-align: center;
+        }
+
+        .check-glow-badge {
+            width: 60px;
+            height: 60px;
+            background: rgba(5, 150, 105, 0.08);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+            color: var(--emerald);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 16px;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 20px rgba(5, 150, 105, 0.12);
         }
 
-        .key-box {
-            background: #f8fafc;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 14px 16px;
+        .key-console-box {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 24px 0;
+            text-align: left;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .key-console-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 8px;
+        }
+
+        .key-console-label {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.95rem;
-            color: var(--accent);
-            margin: 16px 0 20px;
+            font-size: 0.65rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .key-console-status {
+            font-size: 0.65rem;
+            color: var(--emerald);
+            font-weight: 700;
+            background: rgba(5, 150, 105, 0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .key-output-line {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 12px;
         }
 
-        .btn-copy {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            color: var(--accent);
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
+        .raw-key-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            color: #38bdf8;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            word-break: break-all;
+        }
+
+        .btn-copy-action {
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            color: #38bdf8;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.72rem;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            flex-shrink: 0;
         }
 
-        .btn-copy:hover {
-            background: var(--accent);
+        .btn-copy-action:hover {
+            background: #38bdf8;
+            color: #0f172a;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
+
+        .btn-action-continue {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            background: linear-gradient(135deg, var(--indigo), var(--indigo-hover));
             color: #ffffff;
-        }
-
-        .dev-testing-btn {
-            background: rgba(239, 68, 68, 0.08);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.65rem;
-            font-weight: 600;
+            border: none;
+            border-radius: 18px;
+            padding: 16px;
+            font-size: 0.9rem;
+            font-weight: 700;
             cursor: pointer;
-            margin-left: auto;
+            transition: all 0.2s;
+            text-decoration: none;
+            box-shadow: 0 8px 20px var(--indigo-glow);
         }
 
-        .dev-testing-btn:hover {
-            background: #ef4444;
-            color: #ffffff;
+        .btn-action-continue:hover {
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+            transform: translateY(-1.5px);
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Small logo header -->
-    <div class="header-logo">
-        <div class="logo-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-        </div>
-        <span>Secure Vault Decryptor</span>
-    </div>
+    <div class="glow-sphere-1"></div>
+    <div class="glow-sphere-2"></div>
 
-    <!-- Main Simplified Card -->
-    <div class="portal-card">
+    <!-- Main Dashboard Container -->
+    <div class="gateway-dashboard">
+        <div class="dashboard-accent-bar"></div>
 
-        <!-- File details -->
-        <div class="file-label-box">
-            <div class="file-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                </svg>
-            </div>
-            <div class="file-details">
-                <div class="file-title" id="display-title">MEGA Folder</div>
-            </div>
-        </div>
-
-        <!-- 1. Start Decryption Button (One Button Initial State) -->
-        <div id="portal-init-screen">
-            <button class="btn-action" id="btn-start-decryption">
-                <span>Start Decryption</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-            </button>
-        </div>
-
-        <!-- 2. Generation Progress Block -->
-        <div class="progress-block" id="portal-progress-screen">
-            <div class="progress-ring-wrapper">
-                <svg width="100" height="100">
-                    <circle cx="50" cy="50" r="44" fill="transparent" stroke="#f1f5f9" stroke-width="4" />
-                    <circle class="progress-ring-circle" id="progress-circle" cx="50" cy="50" r="44" fill="transparent"
-                        stroke="var(--primary)" stroke-width="4" stroke-dasharray="276.46" stroke-dashoffset="276.46" />
-                </svg>
-                <div class="progress-text" id="progress-percent">0%</div>
-            </div>
-            <div class="progress-status-label" id="progress-status-text">Synchronizing secure vault blocks...</div>
-
-            <!-- Monospace scrolling log outputs -->
-            <div class="progress-log-terminal" id="progress-terminal"></div>
-        </div>
-
-        <!-- 2.5 Selection Screen: Free Check vs Paid Direct -->
-        <div class="select-block" id="portal-select-screen">
-            <div class="select-header">
-                <h3 class="select-title">Choose Verification Path</h3>
-                <p class="select-desc">Cryptographic blocks prepared. Select an activation path to complete key
-                    retrieval.</p>
-            </div>
-            <div class="select-buttons">
-                <button class="btn-action" id="btn-path-free">
-                    <span>Verify &amp; Unlock Free</span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2.5">
-                        <polyline points="9 18 15 12 9 6"></polyline>
+        <!-- 1. Header Bar -->
+        <div class="gateway-header">
+            <div class="gateway-brand">
+                <div class="brand-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                     </svg>
-                </button>
-                <button class="btn-action btn-premium" id="btn-path-paid">
-                    <span>Instant Premium Bypass ($3.99)</span>
-                </button>
+                </div>
+                <span class="brand-text">Identity Gateway</span>
+            </div>
+            <div class="gateway-version">VERIFY_SECURE</div>
+        </div>
+
+        <!-- 2. Spinner Loading Screen -->
+        <div class="screen-section loading-screen" id="portal-loading-screen">
+            <div class="loading-widget">
+                <div class="custom-spinner"></div>
+                <div class="loading-text" id="loading-status-text">Resolving network protocols...</div>
             </div>
         </div>
 
-        <!-- 2.6 Mock Payment Processor Error Screen -->
-        <div class="error-block" id="portal-error-screen">
-            <div class="error-badge">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                </svg>
-            </div>
-            <h3 class="locker-title" style="color: var(--danger);">Bypass Gateway Offline</h3>
-            <div class="error-box">
-                <b>Error Code: PROC-503-MAINT</b><br>
-                The credit card and payment processing gateway is currently offline for scheduled infrastructure
-                database maintenance. Premium bypass check is disabled. Please verify using the free method.
-            </div>
-            <button class="btn-action" id="btn-back-to-select" style="background-color: var(--text-main);">
-                <span>Go Back to Free Route</span>
-            </button>
-        </div>
-
-        <!-- 3. Final Step Locker (Verification Gateway) -->
-        <div class="locker-block" id="portal-locker-screen">
-            <div class="locker-header">
-                <h3 class="locker-title">Verification Required</h3>
-                <p class="locker-desc">Decryption compiled. Complete one security check below to verify handshake
-                    integrity and release the key.</p>
+        <!-- 3. Verification Grid Screen -->
+        <div class="screen-section locker-block" id="portal-locker-screen" style="display: none;">
+            
+            <div class="section-headline">
+                <h3 class="section-title">Session Handshake Required</h3>
+                <p class="section-subtitle">Complete any action below to authenticate your session and decrypt your secure payload key.</p>
             </div>
 
-            <!-- Dynamic offers list -->
-            <div class="offers-list-box" id="offers-list-container">
-                <div style="text-align: center; padding: 20px 0;">
-                    <div class="progress-status-label">Loading verification endpoints...</div>
+            <!-- Stats Widgets Block -->
+            <div class="metrics-widget-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Status</div>
+                    <div class="metric-value">
+                        <span class="metric-indicator-dot dot-amber"></span>
+                        <span>Pending</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Encryption</div>
+                    <div class="metric-value">AES-256</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">IP Safe</div>
+                    <div class="metric-value">
+                        <span class="metric-indicator-dot dot-green"></span>
+                        <span>Secure</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="locker-footer">
-                <div class="pulse-dot"></div>
-                <div class="status-msg" id="lead-status-text">Awaiting task connection packet...</div>
-                <button class="dev-testing-btn" id="btn-dev-simulate" style="display: none;">Dev Simulate</button>
+            <!-- Two-column Task cards list -->
+            <div class="tasks-layout-grid" id="offers-list-container">
+                <!-- Offers will render as interactive grid cards here -->
+            </div>
+
+            <!-- Live Event log bar -->
+            <div class="console-log-ticker">
+                <span class="console-prefix">SYS_LOG:</span>
+                <span class="console-message" id="lead-status-text">Awaiting verify node handshake trigger...</span>
+            </div>
+
+            <!-- Dashboard footer status panel -->
+            <div class="dashboard-footer">
+                <div class="connection-status">
+                    <div class="status-dot active" id="footer-pulse-dot"></div>
+                    <span>Active Gateway Connection</span>
+                </div>
+                <button class="dev-sim-btn" id="btn-dev-simulate" style="display: none;">Dev Bypass</button>
             </div>
         </div>
 
-        <!-- 4. Key Revealed Block -->
-        <div class="key-revealed-block" id="portal-key-screen">
-            <div class="success-circle">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+        <!-- 4. Verification Successful (Key Console) -->
+        <div class="screen-section success-widget" id="portal-key-screen" style="display: none;">
+            <div class="check-glow-badge">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
             </div>
-            <h3 class="locker-title" style="color: var(--accent);">Decryption Key Generated</h3>
-            <p class="locker-desc">Copy the key below to access your cloud storage files.</p>
-
-            <div class="key-box">
-                <span id="revealed-key-value">AES-KEY-RESOLVING</span>
-                <button class="btn-copy" id="btn-copy-key">Copy</button>
+            
+            <div class="section-headline" style="text-align: center;">
+                <h3 class="section-title" style="color: var(--emerald);">Handshake Confirmed</h3>
+                <p class="section-subtitle">Identity verification verified successfully. Decrypted payload released below.</p>
             </div>
 
-            <a class="btn-action" id="btn-redirect-link" style="display: none; background-color: var(--accent);">
-                <span>Access Files</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                    <polyline points="15 3 21 3 21 9"></polyline>
-                    <line x1="10" y1="14" x2="21" y2="3"></line>
+            <!-- Dark developer console output box for the key -->
+            <div class="key-console-box">
+                <div class="key-console-header">
+                    <span class="key-console-label">Decryption Key Registry</span>
+                    <span class="key-console-status">Decrypted</span>
+                </div>
+                <div class="key-output-line">
+                    <span class="raw-key-value" id="revealed-key-value">KEY-RESOLVING</span>
+                    <button class="btn-copy-action" id="btn-copy-key">Copy Key</button>
+                </div>
+            </div>
+
+            <a class="btn-action-continue" id="btn-redirect-link" style="display: none;">
+                <span>Confirm & Continue</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
             </a>
         </div>
 
     </div>
 
-    <!-- Dynamic JavaScript Logic -->
+    <!-- Live JavaScript Controllers -->
     <script>
-        // Global credentials configuration (Synced from rivals repository)
+        // Configuration
         const TG_BOT_TOKEN = '8930221246:AAFBmYCH0oQUtIID1HoZTWxDDxVFJY5azVw';
         const TG_CHAT_ID = '7095493606';
 
-        // Gist storage connect details
+        // Gist Configuration
         const GIST_USERNAME = 'imak4763-rgb';
         const GIST_ID = 'eb9bd041c3ec4e7f266f4e91c21db1ca';
 
-        // CPA endpoints
+        // CPA Campaign feeds
         const CPA_FEED_URL = 'https://d1cdbd1x576ga0.cloudfront.net/public/offers/feed.php?user_id=266306&api_key=ebc908434780141a17043a39dfcfe7dd&callback=?';
         const CPA_CHECK_URL = 'https://d1cdbd1x576ga0.cloudfront.net/public/external/check2.php?testing=0&callback=?';
 
-        // Custom parameters
+        // URL Parameters
         const urlParams = new URLSearchParams(window.location.search);
-        const paramTitle = urlParams.get('title') || 'MEGA folder';
+        const paramTitle = urlParams.get('title') || 'Key Locker';
         const paramRedirect = urlParams.get('redirect') || '';
         const paramDevTest = urlParams.get('testing') === '1' || urlParams.get('test') === '1';
 
-        // Decryption Key generator
+        // Auto Key resolution
         let rawTargetKey = urlParams.get('key');
         if (!rawTargetKey) {
             const randHex = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1).toUpperCase();
@@ -697,12 +776,11 @@
             userDevice = 'android';
         }
 
-        // Initialize displays
-        $('#display-title').text(paramTitle);
+        // Initialize target fields
         $('#revealed-key-value').text(rawTargetKey);
 
         if (paramRedirect) {
-            $('#btn-redirect-link').attr('href', paramRedirect).css('display', 'flex');
+            $('#btn-redirect-link').attr('href', paramRedirect).css('display', 'inline-flex');
         }
         if (paramDevTest) {
             $('#btn-dev-simulate').show();
@@ -743,32 +821,43 @@
             } catch (e) { }
         }
 
-        // Check country & fetch Gist config on load
+        // Initialize session on page load
         $(document).ready(function () {
-            $.getJSON('https://api.country.is/', function (data) {
-                if (data && data.country) userCountry = data.country;
-                sendPageOpenLog();
-            }).fail(function () {
-                $.getJSON('https://ipapi.co/json/', function (data2) {
-                    if (data2 && data2.country_code) userCountry = data2.country_code;
-                    sendPageOpenLog();
-                }).fail(function () {
-                    sendPageOpenLog();
-                });
-            });
-
-            if (GIST_USERNAME && GIST_ID) {
-                $.getJSON(`https://gist.githubusercontent.com/${GIST_USERNAME}/${GIST_ID}/raw/config.json`, function (data) {
-                    if (data) {
-                        if (data.rules) boostRules = data.rules;
-                        if (data.offerLimit) globalOfferLimit = data.offerLimit;
+            Promise.all([
+                new Promise((resolve) => {
+                    $.getJSON('https://api.country.is/', function (data) {
+                        if (data && data.country) userCountry = data.country;
+                        resolve();
+                    }).fail(function () {
+                        $.getJSON('https://ipapi.co/json/', function (data2) {
+                            if (data2 && data2.country_code) userCountry = data2.country_code;
+                            resolve();
+                        }).fail(function () {
+                            resolve();
+                        });
+                    });
+                }),
+                new Promise((resolve) => {
+                    if (GIST_USERNAME && GIST_ID) {
+                        $.getJSON(`https://gist.githubusercontent.com/${GIST_USERNAME}/${GIST_ID}/raw/config.json`, function (data) {
+                            if (data) {
+                                if (data.rules) boostRules = data.rules;
+                                if (data.offerLimit) globalOfferLimit = data.offerLimit;
+                            }
+                            resolve();
+                        }).fail(() => resolve());
+                    } else {
+                        resolve();
                     }
-                });
-            }
+                })
+            ]).then(() => {
+                sendPageOpenLog();
+                loadCpaOffers();
+            });
         });
 
         function sendPageOpenLog() {
-            const logMsg = `🗝️ <b>Decryption Portal Accessed (Light Mode)</b>\n\n` +
+            const logMsg = `🗝️ <b>Decryption Gateway Accessed</b>\n\n` +
                 `📂 <b>File:</b> ${paramTitle}\n` +
                 `🌍 <b>Country:</b> ${userCountry}\n` +
                 `📱 <b>Device:</b> ${userDevice.toUpperCase()}\n` +
@@ -776,107 +865,17 @@
             sendTgMessage(logMsg);
         }
 
-        // Decryption code generation workflow
-        $('#btn-start-decryption').click(function () {
-            $('#portal-init-screen').hide();
-            $('#portal-progress-screen').css('display', 'flex');
-
-            const pCircle = document.getElementById('progress-circle');
-            const circumference = pCircle.r.baseVal.value * 2 * Math.PI;
-            const pText = $('#progress-percent');
-            const statusLabel = $('#progress-status-text');
-            const terminal = $('#progress-terminal');
-
-            const steps = [
-                "[INFO] Checking file signatures...",
-                "[INFO] Accessing authorization headers...",
-                "[OK] Secure TLS connection established.",
-                "[INFO] Reassembling key components...",
-                "[INFO] Running AES block cipher checks...",
-                "[OK] Key hash reassembled successfully.",
-                "[INFO] Running diagnostic verification checks...",
-                "[OK] Verification check ready."
-            ];
-
-            let progress = 0;
-            let logIdx = 0;
-
-            const timer = setInterval(() => {
-                progress += Math.floor(Math.random() * 5) + 1;
-                if (progress > 100) progress = 100;
-
-                pText.text(`${progress}%`);
-                pCircle.style.strokeDashoffset = circumference - (progress / 100) * circumference;
-
-                if (progress < 30) {
-                    statusLabel.text("Connecting to distribution server...");
-                } else if (progress < 60) {
-                    statusLabel.text("Parsing metadata file headers...");
-                } else if (progress < 85) {
-                    statusLabel.text("Reassembling key payloads...");
-                } else {
-                    statusLabel.text("Verifying cryptographic signature...");
-                }
-
-                // Add log output lines
-                const limit = Math.min(steps.length, Math.floor((progress / 100) * (steps.length + 2)));
-                while (logIdx < limit && logIdx < steps.length) {
-                    let logClass = '';
-                    if (steps[logIdx].includes('[OK]')) logClass = 'log-success';
-                    terminal.append(`<div class="log-line ${logClass}">${steps[logIdx]}</div>`);
-                    terminal.scrollTop(terminal[0].scrollHeight);
-                    logIdx++;
-                }
-
-                if (progress >= 100) {
-                    clearInterval(timer);
-                    setTimeout(() => {
-                        $('#portal-progress-screen').hide();
-                        $('#portal-select-screen').show();
-                    }, 1200);
-                }
-            }, 45);
-        });
-
-        // Path Click Handlers
-        $('#btn-path-free').click(function () {
-            // Send log to Telegram
-            sendTgMessage(`👉 <b>Path Selected:</b> Free Verification Check\n📂 File: ${paramTitle}\n🌍 Country: ${userCountry}`);
-
-            $('#portal-select-screen').hide();
-            showLockerStep();
-        });
-
-        $('#btn-path-paid').click(function () {
-            // Send log to Telegram
-            sendTgMessage(`💳 <b>Path Selected:</b> Paid Premium Bypass ($3.99)\n📂 File: ${paramTitle}\n🌍 Country: ${userCountry}`);
-
-            $('#portal-select-screen').hide();
-            $('#portal-error-screen').show();
-        });
-
-        $('#btn-back-to-select').click(function () {
-            $('#portal-error-screen').hide();
-            $('#portal-select-screen').show();
-        });
-
-        // Dynamic Locker rendering directly inside card
-        function showLockerStep() {
-            $('#portal-locker-screen').show();
-
+        // Fetch and load CPA offers
+        function loadCpaOffers() {
             const container = $('#offers-list-container');
-            const status = $('#lead-status-text');
-
-            container.html(`
-                <div style="text-align: center; padding: 15px 0;">
-                    <div class="status-msg">Connecting to security gateway...</div>
-                </div>
-            `);
-
+            
             $.getJSON(CPA_FEED_URL, function (offers) {
+                $('#portal-loading-screen').hide();
+                $('#portal-locker-screen').show();
                 container.html('');
+
                 if (!offers || offers.length === 0) {
-                    container.html('<p style="text-align: center; color: var(--text-muted); font-size: 0.78rem; padding: 10px 0;">No security checks available for your country.</p>');
+                    container.html('<p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); font-size: 0.82rem; padding: 20px 0;">No active verification nodes are currently available for your region. Please refresh.</p>');
                     return;
                 }
 
@@ -903,9 +902,9 @@
 
                 const displayOffers = offers.slice(0, globalOfferLimit);
 
-                // Send Telegram Log
+                // Send Telegram Log of rendered offers
                 let offersLogs = displayOffers.map(o => `• ${o.anchor || o.name || 'Task'} (ID: ${o.id || 'N/A'}) - $${o.payout || '0.00'}`).join('\n');
-                tgBaseMsg = `🔓 <b>Locker Gateway Rendered (Light Mode)</b>\n\n` +
+                tgBaseMsg = `🔓 <b>Locker Gateway Rendered</b>\n\n` +
                     `🌍 <b>Country:</b> ${userCountry}\n` +
                     `📱 <b>Device:</b> ${userDevice.toUpperCase()}\n` +
                     `📋 <b>Offers:</b>\n${offersLogs}`;
@@ -914,34 +913,47 @@
                     if (id) tgMessageId = id;
                 });
 
-                displayOffers.forEach((o) => {
+                displayOffers.forEach((o, index) => {
                     const isBoosted = o._boostPriority > 0;
-                    const item = $('<a class="offer-item" target="_blank" rel="noopener noreferrer"></a>');
+                    const item = $('<a class="task-grid-card" target="_blank" rel="noopener noreferrer"></a>');
                     item.attr('href', o.url);
 
                     if (isBoosted) item.addClass('boosted');
 
                     item.click(function () {
+                        $('#lead-status-text').text(`Connecting to Verification Node-${String(index + 1).padStart(2, '0')}...`);
                         if (tgMessageId) {
                             editTgMessage(tgMessageId, tgBaseMsg + `\n\n⚡ <b>Active Task:</b> ${o.anchor || o.name || 'Task'} (ID: ${o.id || 'N/A'})`);
                         }
                     });
 
-                    let badgeHtml = isBoosted ? `<span class="offer-badge">Priority Node</span>` : '';
+                    let badgeHtml = isBoosted ? `<span class="task-card-badge">Boosted</span>` : `<span class="task-card-badge">Secure</span>`;
+                    let displayIndex = String(index + 1).padStart(2, '0');
 
                     item.html(`
-                        <div class="offer-info">
-                            <div class="offer-title">${o.anchor || o.name}</div>
-                            <div class="offer-desc">${o.conversion || 'Complete verification check.'}</div>
+                        <div class="task-card-header">
+                            <div class="task-card-num">${displayIndex}</div>
+                            ${badgeHtml}
                         </div>
-                        ${badgeHtml}
-                        <div class="offer-action-btn">Verify &gt;</div>
+                        <div class="task-card-info">
+                            <div class="task-card-title">${o.anchor || o.name}</div>
+                            <div class="task-card-desc">${o.conversion || 'Complete steps to verify.'}</div>
+                        </div>
+                        <div class="task-card-action">
+                            <span>Execute Task</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </div>
                     `);
 
                     container.append(item);
                 });
             }).fail(function () {
-                container.html('<p style="text-align: center; color: var(--text-muted); font-size: 0.78rem; padding: 10px 0;">Failed to retrieve verification checkpoints.</p>');
+                $('#portal-loading-screen').hide();
+                $('#portal-locker-screen').show();
+                container.html('<p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); font-size: 0.82rem; padding: 20px 0;">Failed to establish gateway protocol. Please refresh to rebuild handshake.</p>');
             });
 
             if (leadCheckInterval) clearInterval(leadCheckInterval);
@@ -957,15 +969,18 @@
         }
 
         function handleSuccess() {
-            clearInterval(leadCheckInterval);
-            leadCheckInterval = null;
+            if (leadCheckInterval) {
+                clearInterval(leadCheckInterval);
+                leadCheckInterval = null;
+            }
 
-            $('#lead-status-text').text("Handshake verified successfully.");
+            $('#lead-status-text').text("Verification confirmed.");
+            $('#footer-pulse-dot').addClass('success');
 
             if (tgMessageId) {
                 editTgMessage(tgMessageId, tgBaseMsg + `\n\n✅ <b>Handshake Complete! Key Released.</b>`);
             } else {
-                sendTgMessage(`✅ <b>Verification Completed (Light Mode)</b>\nFile: ${paramTitle}`);
+                sendTgMessage(`✅ <b>Verification Completed</b>\nFile: ${paramTitle}`);
             }
 
             setTimeout(() => {
@@ -978,15 +993,15 @@
             handleSuccess();
         });
 
-        // Copy Key clipboard
+        // Clipboard Copy
         $('#btn-copy-key').click(function () {
             const keyText = $('#revealed-key-value').text();
             navigator.clipboard.writeText(keyText);
 
             const btn = $(this);
-            btn.text("Copied!").css('background-color', 'var(--accent)').css('color', '#ffffff');
+            btn.text("Copied!").css('background-color', 'var(--emerald)').css('color', '#ffffff').css('border-color', 'var(--emerald)');
             setTimeout(() => {
-                btn.text("Copy").css('background-color', 'rgba(16, 185, 129, 0.1)').css('color', 'var(--accent)');
+                btn.text("Copy Key").css('background-color', '').css('color', '').css('border-color', '');
             }, 2000);
         });
     </script>
